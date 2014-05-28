@@ -1,0 +1,92 @@
+\chapter{Ranking Model}
+
+Consider the following model:
+all of the weights of edges are independently sampled from the same distribution $D$ which is unknown to us.
+The concept ``competitive ratio $\alpha$'' in this particular model means that for any instance $G$ and distribution $D$, by taking the expectation over all the possible weights and all the permutations, we have $\frac{E[ALG]}{E[OPT]} \ge \alpha$.
+
+\begin{theorem}\label{rothm}
+    Simultaneous stopping rule achieves a constant competitive ratio.
+\end{theorem}
+
+\begin{proof}
+
+    WLOG we may assume that applicants comes according to the order $\{v_1, v_2, \dots, v_n\}$ since there is no difference between them.
+
+    Firstly let's introduce some notations:
+
+    \begin{itemize}
+        \item Event $B(u_i, v_j)$ means that applicant $v_j$
+            values most to firm $u_i$.
+        \item Event $P(u_i, v_j)$ means that firm $u_i$ sends
+            an offer to $v_j$.
+        \item Event $A(u_i, v_j)$ means that firm $u_i$ sends
+            an offer to $v_j$ and $v_j$ accepts it.
+    \end{itemize}
+
+    Fix a particular firm $u \in U$,
+    first bound the probability that it will get the best applicant
+    according to its preference.
+    \begin{align*}
+        \Pr(u\text{ gets the best}) = &\sum_{i=1}^{n} \Pr(B(u, v_i)) \times \Pr(A(u, v_i)|B(u, v_i)) \\
+                                = &\sum_{i=r}^{n} \frac{1}{n} \times \Pr(P(u, v_i)|B(u, v_i)) \\
+                        & \times \Pr(A(u, v_i)|B(u, v_i),P(u, v_i))
+    \end{align*}
+    
+    Given $v_i$ is the best applicant for $u$,
+    once we ensure that the previous $(i-r)$ applicants are
+    no better than the threshold, $u$ will be free when $v_i$ comes and will
+    send her an offer.
+    That is, we need to ensure that over the last $(i-1)$ applicants,
+    the best is among the first $(r-1)$ ones.
+    Since all the applicants arrive in a random order, this probability would be $\frac{r-1}{i-1}$.
+    Thus
+
+    $$\Pr(P(u, v_i) | B(u, v_i)) \ge \frac{r-1}{i-1}$$
+
+    %$$\Pr(u\text{ gets the best}) \ge \sum_{i=r}^{n} \frac{1}{n} \times \frac{r-1}{i-1} \times \Pr(A(u, v_i)|B(u, v_i),P(u, v_i))$$
+
+
+    If $v_i$ receives only one offer which is from $u$, $v_i$ can only choose $u$.
+    And the condition holds when the value of $v_i$
+    for each $u' \neq u$ does not exceed the threshold set by $u'$.
+    In other words, for each $u' \neq u$, over the first $r-1$ applicants together with $v_i$,
+    the best applicant for $u'$ is not $v_i$.
+    These $m-1$ events (each with probability $\frac{r-1}{r}$) are independent from each other,
+    and are all independent from $B(u, v_i)$ and $P(u, v_i)$.
+    Thus
+    $$\Pr(A(u, v_i)|B(u, v_i), P(u, v_i)) \ge (\frac{r-1}{r})^{m-1}$$
+
+    To sum up:
+    $$\Pr(u\text{ gets the best}) \ge \sum_{i=r}^{n} \frac{1}{n} \times \frac{r-1}{i-1} \times (\frac{r-1}{r})^{m-1}$$
+
+    Let $p = \frac{r}{n}$ be a constant, and assume that $m \le \alpha n$ where $\alpha \in (0,1]$ is a parameter.
+
+    Then $(\frac{r-1}{r})^{m-1} \ge (1-\frac{1}{r})^{\alpha n} = ((1-\frac{1}{r})^{r})^{\frac{\alpha}{p}}$ and
+
+    $$\Pr(u \text{ gets the best}) \ge ((1 - \frac{1}{r})^r)^{\frac{\alpha}{p}} \sum_{i=r}^{n} \frac{1}{n}\frac{r-1}{i-1}$$
+
+    Now let $n$ goes to infinity and it approaches the integral:
+
+    $$f(p) = e^{-\frac{\alpha}{p}} \int_{p}^{1} \frac{p}{x} dx = -p \ln(p) e^{-\frac{\alpha}{p}}$$
+    which is a constant depending on the choice of $p$.
+    Thus, for each firm $u$, it
+    has at least a constant probability $f(p)$ to get its best applicant, then we have
+    \begin{align*}
+        E[\text{value of the applicant }u\text{ gets in }ALG]
+        & \ge f(p) \times E[\text{value of the best applicant for }u] \\
+        & \ge f(p) \times E[\text{value of the applicant }u\text{ gets in }OPT]
+    \end{align*}
+    
+    Therefore, it is clear to see that
+    \[ \frac{E[ALG]}{E[OPT]} \ge f(p), \]
+    and we achieves a constant competitive ratio.
+\end{proof}
+
+Note that, in the analysis above, it is not necessary that all the weights of edges are independent and identically distributed.
+All we need is that firms' preference lists are independent from each other. 
+That is, the rank of an applicant $v$ for a firm $u_i$ has nothing to do with the rank of $v$ for another firm $u_j$.
+
+To generalize the random rank model above, we weaken the restriction by
+adding correlations between the weights of edges incident to the same applicant,
+and introduce a new model as follows.
+

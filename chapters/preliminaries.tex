@@ -1,0 +1,203 @@
+\chapter{Preliminaries}
+
+\section{Graph Matching}
+
+\subsection{Bipartite Matching}
+
+A graph is called \emph{bipartite} if its vertex set can be 
+partitioned into two disjoint set $U$ and $V$ such that every edge
+connects a vertex in $U$ with a vertex in $V$. Such a graph is often 
+written as $G = (U, V, E)$ where $U$ and $V$ are two disjoint vertex set
+and $E$ is the edge set.
+
+A \emph{matching} in a graph $G = (U, V, E)$ is a set of edges $M$ such
+that no two edges shared a common vertex. And a matching $M$ is called 
+\emph{maximal} if for every edge $e \in E \setminus M$ it satisfies that
+$e$ shares some common vertices with some edges from $E$.
+Normally we are interested in the \emph{maximum} matching, i.e.\ a matching
+containing the largest possible number of edges. And the size of the
+maximum matching is called the \emph{matching number} of this graph.
+Figure~\ref{maximummatching} shows an example of a maximum matching in
+a bipartite graph. Note that the problem of finding a maximum matching 
+can be solved in polynomial time by \emph{Hungarian method}.
+
+People show their great interests in finding the maximum matching since
+there are deep connections between the matching number and many other
+interesting properties in a given graph. 
+For example, the \emph{K\"{o}nig's theorem} proved by D\'{e}nes K\H{o}nig
+in 1931 states that, in bipartite graph, it is equivalent to find 
+a maximum matching that to find a minimum set cover. Independently in
+the same year by Jen\H{o} Egerv\'{a}ry the same result was shown in the
+more general case of weighted bipartite graphs. Thus a lot of problems
+was shown to be NP-hard in general graphs have a polynomial time
+algorithm in bipartite graphs (e.g.\ minimum set cover).
+
+\begin{figure}\centering
+\begin{tikzpicture}[node distance=1.8cm]
+    \node   (1)     {};
+    \node   (2) [right of = 1]    {};
+    \node   (3) [above of = 1]    {};
+    \node   (4) [right of = 3]    {};
+    \node   (5) [above of = 3]    {};
+    \node   (6) [right of = 5]    {};
+
+    \draw[fill=black]   (1) circle (0.2cm);
+    \draw[fill=black]   (2) circle (0.2cm);
+    \draw[fill=black]   (3) circle (0.2cm);
+    \draw[fill=black]   (4) circle (0.2cm);
+    \draw[fill=black]   (5) circle (0.2cm);
+    \draw[fill=black]   (6) circle (0.2cm);
+
+    \draw[very thick, red]   (1) --  (6);
+    \draw[very thick, red]   (3) --  (2);
+    \draw[very thick, red]   (5) --  (4);
+    \draw   (5) --  (6);
+    \draw   (3) --  (4);
+\end{tikzpicture}
+\label{maximummatching}
+\caption{The red edges forms a maximum matching in graph}
+\end{figure}
+
+\subsection{Weighted Bipartite Matching}
+
+To generalize the maximum matching problem we could assign weights to those
+edges. And the goal is then changed to find a matching with the 
+largest/smallest possible weight. This gives us the \emph{maximum/minimum
+weighted bipartite matching problem}.
+
+Formally speaking, given a weighted complete bipartite graph
+$G = (U, V, w)$ where $U$ and $V$ are two disjoint vertex sets and the edge
+set $E = U \times V$. $w$ is the weight function maps every edge in $E$ 
+to its own weight in $\mathbb{R}$. We have to find a matching $M$ such that
+its weight $w(M) \triangleq \sum_{e \in M} w(e)$ is maximized/minimized.
+
+This maximum weighted bipartite matching problem characterized a lot of
+problems in our daily lives. For example we are selling some items 
+(e.g.\ potato, orange and banana) and the customers 
+(e.g.\ alice, bob and celine) provides their prices on each of these items.
+Every customer wants only one item and a item could only be sold to one of
+the customers. The problem is how are we going to sell these items so that
+we can earn the most money. Figure~\ref{matchingexample} shows an example
+of such a problem, and it is clear that we should sell potato to alice, 
+orange to celine and banana to bob so that we can earn $5 + 6 + 7 = 18$ in
+total.
+
+\begin{figure}
+\begin{center}
+\begin{tabular}{| c | c | c | c |}
+    \hline
+        & potato & orange & banana \\
+    \hline
+        alice & {\bf \color{red} 5} & 3 & 1 \\
+    \hline
+        bob & 2 & 4 & {\bf \color{red} 7} \\
+    \hline
+        celine & 3 & {\bf \color{red} 6} & 4 \\
+    \hline
+\end{tabular}
+\end{center}
+\label{matchingexample}
+\caption{An example of maximum weighted bipartite matching}
+\end{figure}
+
+To solve the maximum/minimum weighted bipartite matching problem, a 
+polynomial-time algorithm was proposed by Harold~\cite{kuhn1955hungarian}, 
+who gives the name ``\emph{Hungarian method}" as this algorithm was 
+largely based on the works done by two Hungarian mathematicians 
+D\'{e}nes K\H{o}nig and Jen\H{o} Egerv\'{a}ry.
+
+\section{Online Algorithms}
+
+But most of time in our real lives, our information about the graph is
+usually incomplete. And we have to make our decisions before the whole
+graph is shown to us.
+
+For example in figure~\ref{matching example}, when Alice comes and wants
+to buy one item, we can not let her wait until Bob and Celine provide their
+prices. We have to make our decision right now on which one to sell before
+Alice gets angry. This scenario raises a new sort of problems in an online
+fashion -- the problems we have to output our answers before 
+the whole input was shown to us.
+
+\subsection{Secretary Problem}
+
+One of the most classical problem is the \emph{online secretary problem}.
+
+Suppose you are hiring a secretary for your firm, and there are $n$
+applicants who come to apply for this job. You have to interview these
+applicants one by one in a random order until you choose one of 
+them as the secretary. After an interview you have to make your decision
+whether to offer her this secretarial position.
+Once the decision is made, it can not be revoked.
+Each applicant has a score on how good they can handle this job and
+of course you want the best one. The difficulty is, before a applicant is
+interviewed you can not know her score.
+How can you make a decision so that the probability of choosing the best
+applicant is maximized?
+
+People have found out that the best strategy for this problem is 
+\emph{stopping rule}:
+\begin{itemize}
+    \item[{\bf Step 1:}] interview the first $r - 1$ applicants and 
+        reject them, set $t$ be the best score among them.
+    \item[{\bf Step 2:}] choose the first subsequent applicant who has
+        a score better than $t$.
+\end{itemize}
+
+For example, suppose that 6 applicants are waiting for the interview
+and their score is $\{3, 4, 2, 5, 1, 6\}$ (in the coming order).
+We choose the secretary using stopping rule with $r = 3$. First we
+interview the first 2 applicants and reject them, record the best score
+as $t = 4$. When the third applicant comes in we found out that her score
+is no better than $t$, hence we reject her. Then the fourth applicant comes
+in, luckily she has a score $5$ greater than $t$, so we offer her the 
+secretarial position and terminate the protocol. Unfortuately we failed to
+pick the best one in the sixth place, but a score of $5$ is not so bad to
+our real needs.
+
+Now what I'm going to show that if the coming order of applicants is
+uniformly at random, then the probability to get the best applicant using
+stopping rule is high.
+
+With a parameter $r$, the probability of choosing the best applicant can
+be easily calculated:
+\begin{align*}
+    P(r) &= \sum_{i = 1}^n \Pr(\text{$i$-th applicant is the best and chosen}) \\
+         &= \sum_{i = 1}^n \Pr(\text{$i$-th applicant is chosen} | \text{$i$-th applicant is the best}) \times \frac{1}{n} \\
+         &= \sum_{i = r}^n \Pr(\text{no one is chosen before $i$}|\text{$i$-th applicant is the best}) \times \frac{1}{n} \\
+         &= \sum_{i = r}^n \frac{r - 1}{i - 1} \times \frac{1}{n}
+\end{align*}
+Note that in the previous equations, the event that no one is chosen 
+before $i$ means the second best among the first $i$ applicant 
+appears before $r$. Therefore \\  
+$\Pr(\text{no one is chosen before $i$}|\text{$i$-th applicant is the best}) = \frac{r - 1}{i - 1}$.
+
+When $n$ goes to infinity, $P(r)$ is approximately the integral
+$\frac{r}{n} \int_{\frac{r}{n}}^1 \frac{1}{x} \mathrm{d}x 
+= \frac{r}{n} \ln(\frac{n}{r})$.
+
+In this problem we can choose $r \approx \frac{n}{e}$ which maximize the
+integral above $P(\frac{n}{e}) \approx \frac{1}{e} \approx 0.368$.
+
+\subsection{Online Matching}
+
+Another perspective of this paper's work originates from online bipartite 
+matching. Given a weighted bipartite graph $G = (U, V, w)$, but at first
+you don't know any information about this graph. 
+Each time one vertex in $V$ is revealed and you can see the weights of
+all edges incident to it. Then you have to decide which vertex in $U$
+should be matched to it immediately before the next vertex in $V$ is
+revealed. When all vertex are revealed you should grantee that the decisions
+you made form a matching and the weight of this matching is maximized.
+Note that the unweighted version of online bipartite matching 
+can be viewed as the weighted one where the edge weight 
+are limited in $\{0, 1\}$.
+
+In fact, the online secretary problem is a special case of weighted 
+bipartite matching. Where the firm is the only one element in $U$ 
+and all applicants form $V$.
+
+\subsection{Competitive Analysis}
+
+\subsection{Decentralized Algorithm}
+

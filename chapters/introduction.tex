@@ -1,0 +1,28 @@
+\chapter{Introduction}
+
+Variants of online secretary problem have be
+
+emph{TODO: Need revision}
+
+\emph{TODO: connection and distinction with online matching}
+
+Consider a complete weighted bipartite graph
+$G = (U, V, w), w: U \times V \rightarrow R^{+}$.
+$U = \{u_1, u_2, \dots, u_m\}$ and $V = \{v_1, v_2, \dots, v_n\}$ ($m \le n$)
+are commonly known as firms and applicants in the market, respectively.
+To avoid ties, we assume that no two edges have the same weight.
+
+In an online setting, all applicants arrive one by one
+in a random order.
+Each firm decides whether to send an offer immediately or not,
+and then each applicant can choose an offer from what she has got.
+And the edge weight $w(u,v)$ is considered to be the benefit $u$ and $v$ will get
+if the applicant $v$ accepts the offer from the firm $u$, in other words, $w(u,v)$ is both the value of $u$ for $v$ and the value of $v$ for $u$.
+Note that each firm can hire at most one applicant as its secretary.
+All decisions can not be revoked.
+Firms and applicants can only see weights of edges which are
+incident to them.
+Our goal is to design decentralized algorithms for each firm such that (i) the resulting overall social welfare is nearly optimal and (ii) each firm by adopting the proposed algorithm can get the nearly optimal applicant.
+By ``decentralized'' it means there is no supervisor doing the
+assignments, and each firm runs its own algorithm independently with no
+communication.

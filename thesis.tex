@@ -1,0 +1,176 @@
+\documentclass[12pt,a4paper,notitlepage,oneside]{report}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Thesis-specific settings
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{body/config}
+
+%%%%%%%%%%%%%%%%
+% Theme settings
+%%%%%%%%%%%%%%%%
+
+\usepackage{times}
+
+\linespread{1.5}
+
+\usepackage[a4paper,top=1.4in,head=1.5cm,headsep=0.5cm,bottom=1.28in,left=1.25in,right=1.25in]{geometry}
+
+\usepackage{graphicx}
+\usepackage{epstopdf}
+
+\usepackage{fancyhdr}
+\fancypagestyle{plain}{%
+  \lhead{\includegraphics[width=4.3cm]{sjtubannerred}}
+  \chead{}
+  \rhead{\begin{minipage}{10cm}\begin{flushright}\fontsize{10pt}{12pt}\selectfont\ThesisTitle\end{flushright}\end{minipage}}
+  \lfoot{}
+  \cfoot{\fontsize{9pt}{9pt}\selectfont\thepage}
+  \rfoot{}
+  \renewcommand{\headrulewidth}{1pt}
+  \renewcommand{\footrulewidth}{0pt}}
+\pagestyle{plain}
+
+\title{\fontsize{16pt}{22pt}\selectfont\bf\ThesisTitle}
+\author{}
+\date{}
+
+\usepackage{abstract}
+\renewcommand{\abstractname}{ABSTRACT}
+\renewcommand{\abstractnamefont}{\fontsize{14pt}{14pt}\selectfont\bf}
+\renewcommand{\abstracttextfont}{\fontsize{12pt}{16pt}\selectfont}
+\setlength{\absleftindent}{0pt}
+\setlength{\absrightindent}{0pt}
+
+\newcommand{\keywords}[1]{\noindent\textbf{Keywords:} #1}
+
+\usepackage[pdfborder=0 0 0,linktocpage=true]{hyperref}
+\usepackage{setspace}
+
+\usepackage{titlesec}
+\titleformat{\chapter}[block]{\fontsize{14pt}{14pt}\selectfont\centering\bf}{\chaptertitlename\ \thechapter}{14pt}{}{}
+\titleformat{\section}[block]{\fontsize{14pt}{14pt}\selectfont\bf}{\thetitle}{14pt}{}{}
+\titleformat{\subsection}[block]{\fontsize{14pt}{14pt}\selectfont\bf}{\thetitle}{14pt}{}{}
+\titleformat{\subsubsection}[block]{\fontsize{14pt}{14pt}\selectfont\bf}{\thetitle}{14pt}{}{}
+\titlespacing*{\chapter}{0pt}{0pt}{28pt}
+\titlespacing*{\section}{0pt}{16pt}{14pt}
+\titlespacing*{\subsection}{0pt}{16pt}{14pt}
+\titlespacing*{\subsubsection}{0pt}{16pt}{14pt}
+
+\usepackage[format=plain,labelsep=quad,font=bf]{caption}
+
+\usepackage[round,semicolon,authoryear,sort&compress]{natbib}
+\bibliographystyle{GBT7714-2005N}
+
+% add references to TOC
+\usepackage[nottoc]{tocbibind}
+\settocbibname{References}
+
+% citation format: ([n], Author, Year: Page.)
+\let\oldcite\cite
+\usepackage{ifthen} % provides \ifthenelse test
+\usepackage{xifthen} % provides \isempty test
+\renewcommand{\cite}[2][]{%
+  \ifthenelse{\isempty{#1}}
+    {\oldcite{#2}}
+    {\citetext{[\citenum{#2}], \citeauthor{#2}, \citeyear{#2}: #1.}}}
+
+\usepackage{amsmath,amssymb,amsthm}
+\makeatletter
+\long\def\theequation{\ifnum \c@chapter > \z@ \thechapter -\fi \@arabic \c@equation}
+\makeatother
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{algorithm}[theorem]{Algorithm}
+\newtheorem{example}[theorem]{Example}
+
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{fact}[theorem]{Fact}
+
+
+\usepackage{algpseudocode}
+\newcommand{\To}{\ \textbf{to}\ }
+
+\usepackage{tikz}
+\usetikzlibrary{matrix,positioning,fit,backgrounds}
+
+\newcommand{\eqn}[1]{Equation (\ref{eqn:#1})}
+\newcommand{\fig}[1]{Figure \ref{fig:#1}}
+
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{ %
+  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+  basicstyle=\footnotesize\tt,     % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{mygreen},    % comment style
+  deletekeywords={...},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  frame=single,                    % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+  morekeywords={*,...},            % if you want to add more keywords to the set
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=9pt,                   % how far the line-numbers are from the code
+  numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+  tabsize=2,                       % sets default tabsize to 2 spaces
+  title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+}
+
+%%%%%%%%%%%%%%%%%%%%%%
+% Document starts here
+%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\pagenumbering{gobble} % disable page numbering
+
+\maketitle
+
+\input{body/abstract}
+
+\clearpage
+\begin{spacing}{1.0}
+\tableofcontents
+\end{spacing}
+
+\clearpage
+\pagenumbering{arabic} % enable page numbering
+
+\input{body/main}
+
+{\def\chapter*#1{}
+\clearpage
+\begin{center}\fontsize{14pt}{14pt}\selectfont\bf REFERENCE\end{center}
+\begin{spacing}{1.5}
+\fontsize{12pt}{12pt}\selectfont
+\setcitestyle{numbers}
+\input{body/bibs}
+\end{spacing}}
+
+{\def\chapter*#1{}
+\clearpage
+\begin{center}\fontsize{14pt}{14pt}\selectfont\bf Acknowledgements\end{center}
+\input{body/ack}}
+
+\end{document}
