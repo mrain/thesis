@@ -238,7 +238,19 @@ maintaining a linear list in~\cite{sleator1985amortized}.
 And we called an algorithm 
 $\alpha$-competitive if its \emph{competitive ratio} 
 -- the ratio between its solution and the solution of its optimal offline
-algorithm -- is bounded from above/below by $\alpha$.
+algorithm -- is bounded from above/below by $\alpha$. More formally,
+
+\begin{definition}
+    For a maximization(or minimization) problem, an online algorithm is said
+    to have a competitive ratio of $\alpha$ -- $\alpha$-competitive -- if
+    and only if its outcome, denoted by $ALG$, and the optimal offline
+    algorithm's outcome, denote by $OPT$, satisfy that
+    $\frac{OPT}{ALG} \le \alpha$ 
+    (or respectively $\frac{ALG}{OPT} \le \alpha$).
+\end{definition}
+
+Note that this definition may change accordingly subject to the actual 
+computational model, such as involving randomness.
 
 For example, the ranking algorithm which is mentioned above to solve the
 unweighted online bipartite matching, always output a matching of size
@@ -308,9 +320,12 @@ and the \emph{optimistic} algorithm. Both algorithms have the same
 observation phase: observe and reject the first $r - 1$ applicants, but
 instead of setting just one threshold $t$, we keep a threshold set $T$ to
 be the set of the best $k$ applicants among them.
+Denote the score of applicant $v$ as $s(v)$.
 Denote that $T = \{t_1, t_2, \dots, t_{k}\}$ where 
 $t_1, t_2, \dots, t_{k}$ are sorted in decreasing order with respect
-to their score $s(t_i)$. Then there comes the selection phase:
+to their score $s(t_i)$. 
+Assume that $v_i$ is the $i$-th applicant according to the coming order.
+Then there comes the selection phase:
 \begin{itemize}
     \item[{\bf Virtual:} ]
         When an applicant $v_i$ comes in, it is selected if and only if
@@ -330,4 +345,70 @@ to their score $s(t_i)$. Then there comes the selection phase:
         future and then offer them these secretarial positions.
 \end{itemize}
 
+It's clear that both two algorithms select no more than $k$ secretaries
+according to the protocol. Now it's sufficient to present the main theorem
+of their result on multiple-choice secretary problem and prove it in the
+way they did.
 
+\begin{theorem}\label{multichoice}
+    Both virtual algorithm and optimistic algorithm achieves a competitive
+    ratio of $e$ as $n$ grows to infinity if we set $r \approx \frac{n}{e}$.
+\end{theorem}
+
+Before proving the main theorem, two important lemmas are established below.
+Denote the set of applicants who are selected by $S$.
+
+\begin{lemma}\label{virtual}
+    For applicant $v$ whose score is among the best $k$ applicants,
+    using the virtual algorithm,
+    the probability of $v$ is selected as one of the secretaries is
+    $$\Pr(v \in S) \ge \frac{r - 1}{n} \ln(\frac{n}{r - 1})$$
+\end{lemma}
+
+\begin{lemma}\label{optimistic}
+    For applicant $v$ whose score is among the best $k$ applicants,
+    using the optimistic algorithm,
+    the probability of $v$ is selected as one of the secretaries is
+    $$\Pr(v \in S) \ge \frac{r - 1}{n} \ln(\frac{n}{r - 1})$$
+\end{lemma}
+
+The proof of lemma~\ref{optimistic} is quite complicated and requires
+pages long calculation. But the proof of lemma~\ref{virtual} is 
+surprisingly simple:
+
+\begin{proof}[Proof of Lemma~\ref{virtual}:]
+    According to the protocol, if applicant $v$ -- the applicant 
+    whose score happens to be among the best $k$ applicants -- 
+    comes in at the $i$-th place where $i > r - 1$, it will
+    be selected if and only if the last one in the threshold set $T$
+    appears before time $r$. Since the coming order is uniformly at random,
+    this event has a probability of $\frac{r - 1}{i - 1}$. Therefore
+    the probability of $v$ is selected as one of the secretaries is
+    $$\Pr(v \in S) \ge \sum_{i=r}^{n} \frac{1}{n} \frac{r - 1}{i - 1}
+    = \frac{r - 1}{n} \sum_{i=r}^{n} \frac{1}{i - 1}
+    \ge \frac{r - 1}{n} \int_{r-1}^n \frac{1}{x} \mathrm{d}x
+    = \frac{r - 1}{n} \ln(\frac{n}{r - 1})$$
+\end{proof}
+
+Then it is straightforward to proof the main theorem:
+
+\begin{proof}[Proof of Theorem~\ref{multichoice}]
+    Assume that $v_i^*$ is the $i$-th best applicant among 
+    the $n$ applicants applying for the secretarial positions.
+    Clearly that the answer of the optimal offline algorithm is 
+    $OPT = \sum_{i = 1}^{k} s(v_i^*)$.
+    By the linearity of expectation, the answer obtained by
+    the virtual/optimistic algorithm is
+    \begin{align*}
+        E[ANS] &= \sum_{i = 1}^{n} s(v_i^*) \times \Pr(v_i^* \in S)
+    \ge \sum_{i=1}^{k} s(v_i^*) \times \Pr(v_i^* \in S) \\
+    &\ge \sum_{i=1}^{k} s(v_i^*) \times \frac{r-1}{n} \ln(\frac{n}{r-1})
+    = OPT \times \frac{r-1}{n} \ln(\frac{n}{r-1})
+    \end{align*}
+
+    Then the theorem is obtained by setting $r \approx \frac{n}{e}$.
+\end{proof}
+
+\subsection{More on Generalized Secretary Problem}
+
+Besides multiple-choice secretary problem, 
