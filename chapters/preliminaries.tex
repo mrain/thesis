@@ -136,13 +136,13 @@ How can you make a decision so that the probability of choosing the best
 applicant is maximized?
 
 People have found out that the best strategy for this problem is 
-\emph{stopping rule}:
-\begin{itemize}
-    \item[{\bf Step 1:}] interview the first $r - 1$ applicants and 
-        reject them, set $t$ be the best score among them.
-    \item[{\bf Step 2:}] choose the first subsequent applicant who has
-        a score better than $t$.
-\end{itemize}
+\emph{stopping rule}. This strategy contains two phases, the observation
+phase and the selection phase:
+In the \emph{observation phase}, the firm would interview the first $r - 1$ 
+applicants and reject them, set $t$ be the best score among them.
+Later in the \emph{selection phase}, the firm would choose the first 
+subsequent applicant who has a score better than $t$.
+Here $r$ is set accordingly and proportional to $n$.
 
 For example, suppose that 6 applicants are waiting for the interview
 and their score is $\{3, 4, 2, 5, 1, 6\}$ (in the coming order).
@@ -157,7 +157,7 @@ our real needs.
 
 Now what I'm going to show that if the coming order of applicants is
 uniformly at random, then the probability to get the best applicant using
-stopping rule is high.
+stopping rule is at least a constant.
 
 With a parameter $r$, the probability of choosing the best applicant can
 be easily calculated:
@@ -177,7 +177,7 @@ $\frac{r}{n} \int_{\frac{r}{n}}^1 \frac{1}{x} \mathrm{d}x
 = \frac{r}{n} \ln(\frac{n}{r})$.
 
 In this problem we can choose $r \approx \frac{n}{e}$ which maximize the
-integral above $P(\frac{n}{e}) \approx \frac{1}{e} \approx 0.368$.
+integral above so that $P(\frac{n}{e}) \approx \frac{1}{e} \approx 0.368$.
 
 \subsection{Online Matching}
 
@@ -186,18 +186,148 @@ matching. Given a weighted bipartite graph $G = (U, V, w)$, but at first
 you don't know any information about this graph. 
 Each time one vertex in $V$ is revealed and you can see the weights of
 all edges incident to it. Then you have to decide which vertex in $U$
-should be matched to it immediately before the next vertex in $V$ is
-revealed. When all vertex are revealed you should grantee that the decisions
+should be matched to it immediately before revealing the next vertex in $V$.
+When all vertex are shown to us you should grantee that the decisions
 you made form a matching and the weight of this matching is maximized.
 Note that the unweighted version of online bipartite matching 
 can be viewed as the weighted one where the edge weight 
 are limited in $\{0, 1\}$.
 
-In fact, the online secretary problem is a special case of weighted 
+In fact, the online secretary problem is a special case of online weighted 
 bipartite matching. Where the firm is the only one element in $U$ 
 and all applicants form $V$.
 
+For the unweighted version, first we allow an adversery to decide the
+revealing order of $V$.
+The first landmark result was shown in~\cite{karp1990optimal} that if
+randomization is allowed, there exists an algorithm which in expectation
+obtains a matching of size at least $(1 - \frac{1}{e})n$ assuming that 
+$\abs{U} = \abs{V} = n$ and there exists a matching of size $n$ in the
+underline graph. Recently in~\cite{birnbaum2008line} it provides a much
+simpler proof for this result and in~\cite{devanur2013randomized} it
+gives a randomized primal-dual analysis for the algorithm they proposed.
+This algorithm first randomly rank the vertex in $U$ and
+each time when one vertex $v$ in $V$ is revealed, it matches $v$ to the
+a vertex in $U$ with the highest possible rank.
+This algorithm does break the barrier that no deterministic protocol can
+find a matching of size better than $\frac{n}{2} + O(\log (n))$ in the 
+worst case. And then they proved this \emph{ranking algorithm} is indeed
+optimal for unweighted online bipartite matching problem.
+
+In another direction, if we assume that the revealing order of $V$ is
+uniformly at random, will there be some more powerful algorithms? 
+It is quite a hot topic in recent years, and the answer is luckily 
+positive. In~\cite{aggarwal2011online},~\cite{feldman2009online},
+~\cite{mahdian2011online},~\cite{mehta2007adwords} and
+~\cite{bahmani2010improved} they provide several new algorithms which
+achieve better performances and even work well in the weighted case. 
+Most of these algorithms are based on linear programmming.
+
 \subsection{Competitive Analysis}
 
-\subsection{Decentralized Algorithm}
+Sometimes it may be a little bit complicated while analysing the performance 
+of online algorithms since these analyses are often highly dependent on the
+actual computational model behind. So a new powerful tool called
+\emph{competitive analysis} is invented to solve this problem.
+
+Competitive analysis of an online algorithm compares its performance to
+the performance of its optimal offline algorithm that knows all the input 
+data before making decisions. 
+It is first brought out to analysis the protocols for dynamically
+maintaining a linear list in~\cite{sleator1985amortized}.
+And we called an algorithm 
+$\alpha$-competitive if its \emph{competitive ratio} 
+-- the ratio between its solution and the solution of its optimal offline
+algorithm -- is bounded from above/below by $\alpha$.
+
+For example, the ranking algorithm which is mentioned above to solve the
+unweighted online bipartite matching, always output a matching of size
+at lease $(1 - \frac{1}{e})n$ in expectation. While we know that the
+underline graph has a maximum matching of size $n$ and we can find it out
+using Hungarian algorithm (which is optimal offline algorithm). 
+Therefore the competitive ratio of ranking algorithm is $(1 - \frac{1}{e})$
+and we called it an $(1 - \frac{1}{e})$-competitive algirhtm.
+
+Unlike the classical worst-case analysis of an algorithm, which only 
+focuses on the algorithm's performance for those ``hard" inputs. Competitive
+analysis requires the online algorithm to perform well on both ``easy" and
+``hard" inputs. Here ``easy" and ``hard" are defined accordingly with
+respect to the performance of the optimal offline algorithm.
+
+\section{Generalized Secretary Problems}
+
+In previous section we have introduced the classicle online secretary
+problem. It requires one firm to hire one secretary among 
+a list of applicants. And it adapts an optimal protocol called the
+stopping rule. But in our real life, the scenarios could be more
+complicated. Therefore we have to generalize this problem and give more
+refined analysis to them.
+
+\subsection{Multiple-choice Secretary Problem}
+
+One if its generalization is, instead of just hiring one secretary among
+the $n$ applicants, the firm needs more secretaries (let's say $k$).
+Which gives us the \emph{multiple-choice secretary problem}.
+It is natural to consider whether we could modify the optimal stopping rule
+for classical online secretary problem to solve this new problem.
+
+For example, we keep the observation phase unchanged -- reject the first
+$r - 1$ applicants and record the best score among them as $t$. And in
+the selection phase we choose every applicant whose score is greater than 
+$t$ until we reach the quota $k$. Sadly this modified algorithm does not
+work so well as we expected. Difficulties show up when $k$ grows large.
+
+Here is a counterexample. Assume that $k = \alpha n$ for some constant 
+$\alpha$. Let $p$ be any constant with in the range $(0, 1)$ and 
+we will look at the best $p k$ applicants. The probability that no one
+among the best $p k$ applicants appears in the observations phase is
+$(1 - \frac{p k}{n})^r$. As for $k$ and $r$ are both proportional to $n$,
+this probability tends to 0 as $n$ goes to infinity. Therefore it is almost
+sure that at lease one of the best $p k$ applicants will be in the
+observation phase. Then in the selection phase, no more than $p k$
+applicants would be selected since the threshold $t$ is set to be the score
+of one of the best $p k$ applicants according to the protocol.
+So the competitive ratio of this modified protocol is no better than $p$.
+Notice that $p$ could be chosen arbitrarily as long as it's a constant, 
+so this protocol can never achieve a constant competitive ratio.
+
+In~\cite{kleinberg2005multiple} Robert Kleinberg gave a clever algorithm
+based on a simple recursion to solve the multiple-choice secretary problem.
+It achieves a competitive ratio of $1 - O(\sqrt{1 / k})$. 
+This is even better than constant competitive ratio that origin stopping 
+rule achieves. He did also proof that this result is already tight,
+i.e.\ no algorithm could achieve a competitive ratio of 
+$1 - \Omega(\sqrt{1 / k})$.
+
+Later in~\cite{babaioff2007knapsack}, Moshe Babaioff, Nicole Immorlica,
+David Kempe and Robert Kleinberg proposed their modifications of the 
+classical stopping rule to solve the multiple-choice secretary problem
+with a constant competitive ratio.
+In their paper they provides two modifications, the \emph{virtual} algorithm
+and the \emph{optimistic} algorithm. Both algorithms have the same
+observation phase: observe and reject the first $r - 1$ applicants, but
+instead of setting just one threshold $t$, we keep a threshold set $T$ to
+be the set of the best $k$ applicants among them.
+Denote that $T = \{t_1, t_2, \dots, t_{k}\}$ where 
+$t_1, t_2, \dots, t_{k}$ are sorted in decreasing order with respect
+to their score $s(t_i)$. Then there comes the selection phase:
+\begin{itemize}
+    \item[{\bf Virtual:} ]
+        When an applicant $v_i$ comes in, it is selected if and only if
+        $s(v_i) > s(t_{k})$ and $t_{k}$ appears in the
+        observation phase. If it happens that $s(v_i) > s(t_{k})$,
+        $v_i$ is added to the threshold set $T$ and $t_{k}$ is
+        removed. Thus, this algorithm always keeps the best $k$ applicants
+        having met so far in the threshold set $T$.
+    \item[{\bf Optimistic:} ]
+        When an applicant $v_i$ comes in, it is selected if and only if
+        $T$ is not empty and $s(v_i) > s(t_{\abs{T}})$. After selecting
+        $v_i$, $t_{\abs{T}}$ is removed from the threshold set $T$ while
+        no other elements would be added to $T$. This is called
+        ``optimistic" since we always remove $t_{\abs{T}}$ even if the score
+        of $v_i$ is better than, say, $s(t_1)$. Thus, it implicitly assumes
+        that it will see additional more outstanding applicants in the
+        future and then offer them these secretarial positions.
+\end{itemize}
+
 
