@@ -2,62 +2,113 @@
 
 \section{Formal Definition}
 
-First of all, we need to formally define the objective function in our problem.
-Generally speaking, for a given instance $G = (U, V, w)$, considering every permutation of the applicants,
-we have the value of optimal assignment (denoted by $OPT$), and the value of the algorithm's outcome (denoted by $ALG$).
-By saying ``competitive ratio $\alpha$'' in the general case, we mean that for any instance $G$, $\frac{E[ALG]}{E[OPT]} \ge \alpha$.
-In the following sections, we will present more specific settings, and will define the objectives accordingly.
+Before giving our results, we need to first define the model
+of our problem and its objective function.
+Generally speaking, instead of one, we have $n$ firms and each of them
+wants to hire one secretary. There are $m$ applicants waiting outside
+for their interview. The applicants will come in one by one and all
+$n$ firms would interview her simultaneously. After one interview each
+of the firms would grade the applicant who has just been interviewed
+a score, and then decide whether to accept her or not. If the applicant
+receives offers, she could choose any one of them.
+In the following part we assume that the applicant would always choose the
+offer with the highest score, for it probably has the highest salary
+in real life.
+
+More formally, in a bipartite matching perspective.
+For a given edge weighted complete bipartite $G = (U, V, w)$,
+where $U$ corresponds to the set of $m$ firms, 
+$V$ corresponds to the set of $n$ applicants
+and $w$ is the weight function corresponding to the score firm $u$
+graded applicant $v$.
+For simplicity we assume that no two edges have the same weights.
+
+The goal is to design a decentralized algorithm for each firm to
+(i) maximize the social welfare, i.e.\ find a matching with the 
+largest possible sum of scores and (ii) for each firm by adopting the
+proposed algorithm they can get their optimal applicants,
+i.e\ the best applicant they can get among all possible maximum weighted
+bipartite matching. By decentralization it means that, there is no
+supervisor doing such an assignment and each firm has
+to run the algorithm independently without any communication or
+any global information.
+
+We have the value of optimal assignment (denoted by $OPT$), 
+and the value of the algorithm's outcome (denoted by $ALG$).
+By saying ``competitive ratio $\alpha$'' in the general case, 
+we mean that for any instance $G$, $\frac{E[ALG]}{E[OPT]} \ge \alpha$.
+In the following sections, we will present more specific settings, 
+and will define the objective functions accordingly.
 
 \section{Simultaneous stopping rule}
 
-Then we turn to the algorithms.
-For the applicants, everyone adopts the same simple strategy:
-select the most valuable offer among those she have got.
-And for firms, we propose two algorithms based on classical online
-secretary problem's approaches.
+Then we turn to the algorithms. In the following part we will provides
+two simple algorithms, and see how well they can solve this problem in
+different scenarios.
 
-One direct algorithm is \textbf{simultaneous stopping rule}:
+It is natural to think of whether we cound simply apply the classical
+stopping rule for online secretary problem here.
+So here comes our first approach -- \textbf{simultaneous stopping rule}:
 
-\begin{enumerate}
-    \item Each firm $u$ observes and rejects the first $(r - 1)$ applicants.
+\begin{itemize}
+    \item 
+        The \emph{observation phase}:
+        each firm $u$ observes and rejects the first $(r - 1)$ applicants.
         Denote the value of the best applicant among them by $t_u$ which
-        is the threshold. Typically we set $r$ to be a constant fraction of $n$
+        is the threshold. 
+        Typically we set $r$ to be a constant fraction of $n$
         such as $\lfloor \frac{n}{e} \rfloor + 1$.
 
-    \item For each applicant coming in later, each firm $u$ who hasn't been
-        matched before sends her an offer if and only if
-        its value exceeds $t_u$.
-\end{enumerate}
-%reject first $r - 1$ applicants and use their value to
-%set a threshold, and then propose everyone whose value exceeds
-%that threshold as long as it is still available.
+    \item 
+        The \emph{selection phase}:
+        for each applicant who comes in later, 
+        each firm $u$ who hasn't been matched before sends her an 
+        offer if and only if its value exceeds $t_u$.
+\end{itemize}
 
-%Typically we set $r = \lfloor \frac{n}{e} \rfloor + 1$.
-But this algorithm does not work very well in general case if
-we let $r = \lfloor \beta n \rfloor + 1$ for some constant $\beta < 1$.
+This algorithm is simple and straightforward. But unfortunately
+it does not work very well in general case.
+Here is a counterexample:
+let $r = \lfloor \beta n \rfloor + 1$ for some constant $\beta \in (0, 1)$.
 
 \begin{example}\label{example1}
     Let $m = \Theta(n)$. There are two kinds of applicants.
-    First we have $a = \Theta(\log(n))$ `good' applicants with weight $2 + \epsilon_{u,v}$
+    First we have $a = \Theta(\log(n))$ ``good" applicants with 
+    weight $2 + \epsilon_{u,v}$
     for all edges incident to them.
-    The rest applicants are marked as `bad' with weight $1 + \epsilon_{u,v}$
+    The rest applicants are marked as ``bad" with 
+    weight $1 + \epsilon_{u,v}$
     for all edges incident to them
-    ( $\abs{\epsilon_{u,v}} < \frac{1}{2}$ is only used to avoid ties).
+    ( $\abs{\epsilon_{u,v}} < \frac{1}{2}$ is only used to avoid ties
+    and they could be arbitrarily small so we can ignore them for
+    simplicity of the analysis).
 \end{example}
 
-Note that all $\epsilon_{u,v}$ could be arbitrarily small. So
-in the following discussion, we can ignore them.
-For any permutation of the applicants, $OPT = m + a$, thus $E[OPT] = m + a$.
-Now it's time to give a upper bound for $E[ALG]$.
+For any permutation of the applicants, it is clear that $OPT = m + a$ by
+choosing $a$ ``good" applicants and $m - a$ ``bad" applicants.
+To show that simultaneous stopping rule fails to handle this setting,
+we are going to give a upperbound for $E[ALG]$.
+The upperbound is established by stating that (i) it is almost sure
+that the firms can witness a ``good" applicant in the observation phase and
+(ii) in this case, only a few firms cound successfully find their
+secretaries.
 
-In the first $(r - 1)$ rounds, the probability that no firm sees
+In the first $(r - 1)$ rounds, the probability that no firm observes
 a `good' applicant is:
 
 $$\prod_{i=0}^{\lfloor \beta n \rfloor} \frac{n - a - i}{n - i}
 \le (1 - \frac{a}{n})^{\lfloor \beta n \rfloor} \le (1 - \frac{a}{n})^{\beta n - 1}$$
 
-And if they did observe a `good' applicant, no `bad' applicant can be
-matched since threshold for each firm is set to be near $2$.
+We first observes that this function $(1 - \frac{a}{n})^{\beta n}$
+is asymptotically $e^{-\beta a}$ as $n$ goes to infinity.
+And we set $a = \Theta(\log(n))$, so this probability goes to $0$
+as $n$ grows.
+
+The second thing is, 
+if the firms did observe a ``good" applicant in the observation phase, 
+no firm could give a offer to ``bad" applicants in the selection 
+phase according to the protocol
+since threshold for each firm is set to be near $2$.
 
 Therefore
 \begin{align*}
@@ -70,44 +121,106 @@ Therefore
 
 \begin{corollary}
 In the general case, simultaneous stopping rule cannot get better competitive ratio than $\Theta(\frac{\log n}{n})$
-if we set $r = \lfloor \beta n \rfloor + 1$ for some constant $\beta < 1$.
+if we set $r = \lfloor \beta n \rfloor + 1$ for some constant 
+$\beta \in (0, 1)$.
 \end{corollary}
 
 The problem encountered here is that, without global information, firms
-are competing over a small set of applicants and left all the others aside.
+will be competing over a small set of elite applicants 
+and left all the others aside. While their choices could be more flexible
+to avoid this kind of tragedy.
 
 
 \section{Simultaneous stopping rule with $m$ slots}
 
 To tackle this problem, we slightly modify the algorithm above.
 Instead of only one threshold, we set $m$ thresholds.
-Like the algorithm for multiple choice secretary problem proposed
-in \emph{TODO}, we call it \textbf{simultaneous stopping rule with m
-thresholds}:
+Like the virtual algorithm for multiple choice secretary problem proposed
+in section~\ref{multichoiceproblem}, 
+we call it \textbf{simultaneous stopping rule with m thresholds}:
 
-\begin{enumerate}
-    \item Each firm $u$ observes and rejects the first $(r - 1)$ applicants.
-        Choose the best $m$ applicants to form a threshold set $T_u$.
-        Denote their values by $t_{u,1}, t_{u,2}, \dots, t_{u,m}$
+\begin{itemize}
+    \item 
+        The \emph{observation phase}:
+        Each firm $u$ observes and rejects the first $(r - 1)$ applicants,
+        then choose the best $m$ applicants among them 
+        to form a threshold set $T_u$.
+        Denote their scores by $t_{u,1}, t_{u,2}, \dots, t_{u,m}$
         in decreasing order.
         (Some of them are set to be $-\infty$ if not enough).
 
-   \item For each applicant $v$ arriving later and each firm $u$, if the
+   \item 
+       The \emph{selection phase}:
+       For each applicant $v$ who comes in later and each firm $u$, if the
        applicant $v$'s value $w(u,v)$ exceed $t_{u,m}$,
        then add it to $T_u$ and the least valuable one in $T_u$ is removed.
        That is, firm $u$ always keeps the best $m$ values in $T_u$.
-       And $v$ will get an offer from $u$ if and only if $w(u,v)$ is added to $T_u$ and
-       the one removed from $T_u$ is $-\infty$ or has an arrival time less than $r$.
+       And $v$ will get an offer from $u$ if and only if $w(u,v)$ 
+       is added to $T_u$ and the one removed from $T_u$ 
+       is either $-\infty$ or has an arrival time less than $r$.
+\end{itemize}
 
+Similar you can define a new algorithm based on the optimistic algorithm for
+multiple-choice secretary problem, and prove the results with this new
+algorithm. But it will be a lot more complicated, so here we do only
+focus on the variant of virtual algorithm.
 
-\end{enumerate}
+As you can see the choices firms have by adopting simultaneous stopping
+rule with $m$ slots are more flexible. They all have at most $m$ chances
+to find their desired secretaries.
+It will be shown later that this simultaneous stopping rule works well
+for example~\ref{example1} above.
+But the flexibility brought out more problems.
+Here is a simple bad example for simultaneous stopping rule.
 
+\begin{example}\label{example2}
+    Let $m = \Theta(n)$. The score that firms grade applicants are all
+    $1 + \epsilon_{u,v}$ except for a special firm $u^*$ and a special
+    applicant $v^*$. The score $u^*$ gives $v^*$ is denoted by $s$,
+    and $s$ can be arbitrarily large.
+    About $\epsilon_{u, v}$, the same as in example~\ref{example1}, 
+    $\abs{\epsilon_{u, v}}$ could be arbitrarily small.
+    One additional requirement is that, for any 
+    applicant $v$, $\epsilon_{u^*, v} > 0$ and for any firm $u \neq u^*$, 
+    $\epsilon_{u, v} < 0$.
+\end{example}
 
+It is observed that, with the additional requirement, once $u^*$ send its
+offer, the applicant who receives it would definitely choose $u^*$.
+Another observation is that, 
+the performance of simultaneous stopping rule is dependent on
+the probability that $v^*$ is matched to $u^*$ since the score which
+$u^*$ grade $v^*$ can be arbitrarily large.
+Then we are going to show that this probability is relatively small.
 
-\emph{TODO: more comments}
+Assume that $v^*$ comes in for an interview at the $i$-th position where
+$i \ge r$. If we want $u^*$ to hold $v^*$, two things have to be ensured:
+(i) $u^*$ hasn't sent its offer yet, (ii) $u^*$ has to send its offer to
+$v^*$. Clearly that condition (ii) directly follows from condition (i).
+As for the condition (i), it is equivalent to the situation that, for $u^*$
+the best $m$ applicants who comes in before applicant $v^*$ 
+has an arrival time before $r$.
+And because the incoming order is uniformly at random,
+this happens with a probability of
+$$\frac{r - 1}{i - 1} \frac{r - 2}{i - 2} \cdots \frac{r - m}{i - m}
+\le \left(\frac{r - 1}{i - 1}\right)^m$$
+Therefore the probability of $u^*$ getting $v^*$ is no greater than
+$$\frac{1}{n}\sum_{i = r}^{n} \left(\frac{r - 1}{i - 1}\right)^m$$
+And this formula is asymptotically the integral
+$$\int_{\frac{r - 1}{n}}^{1} \left(\frac{r - 1}{nx}\right)^m \mathrm{d}x
+= \frac{x}{- m + 1} \left.\left(\frac{r-1}{nx}\right)^{m} \right|_{\frac{r-1}{n}}^{1}
+= \frac{1}{m - 1} \left( \frac{r - 1}{n} - \left(\frac{r - 1}{n}\right)^m\right)$$
+Because $m$ and $r$ are both proportional to $n$, this integral tends
+to 0 as $n$ grows to infinity.
+Hence it is very unlikely that $u^*$ will get $v^*$.
+So the performance of simultaneous stopping rule with $m$ slots is
+relatively poor.
 
-Later on, we are going to propose more specific models to see how well the two algorithms could work.
-In Section \ref{} and \ref{}, simultaneous topping rule can achieve constant competitive ratio under certain conditions;
-while in Section \ref{}, the algorithm with m thresholds works well.
+The problem of the simultaneous stopping rule with $m$ slots is, 
+the threshold that we set is not high enough to filter out 
+those applicants who are not sufficiently good. While this is what
+the simultaneous stopping rule is good at.
 
-
+Although this two algorithms does not work that well in general case.
+In the next chapter we are going to find some more specific models to
+show how powerful this two algorithms could be solving this problem.

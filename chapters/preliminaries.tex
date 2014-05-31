@@ -232,7 +232,9 @@ actual computational model behind. So a new powerful tool called
 
 Competitive analysis of an online algorithm compares its performance to
 the performance of its optimal offline algorithm that knows all the input 
-data before making decisions. 
+data before making decisions.
+The outcome of the optimal offline algorithm is often called the God's
+result since it knows everything just as the God does.
 It is first brought out to analysis the protocols for dynamically
 maintaining a linear list in~\cite{sleator1985amortized}.
 And we called an algorithm 
@@ -245,7 +247,7 @@ algorithm -- is bounded from above/below by $\alpha$. More formally,
     to have a competitive ratio of $\alpha$ -- $\alpha$-competitive -- if
     and only if its outcome, denoted by $ALG$, and the optimal offline
     algorithm's outcome, denote by $OPT$, satisfy that
-    $\frac{OPT}{ALG} \le \alpha$ 
+    $\frac{ALG}{OPT} \ge \alpha$ 
     (or respectively $\frac{ALG}{OPT} \le \alpha$).
 \end{definition}
 
@@ -258,12 +260,13 @@ at lease $(1 - \frac{1}{e})n$ in expectation. While we know that the
 underline graph has a maximum matching of size $n$ and we can find it out
 using Hungarian algorithm (which is optimal offline algorithm). 
 Therefore the competitive ratio of ranking algorithm is $(1 - \frac{1}{e})$
-and we called it an $(1 - \frac{1}{e})$-competitive algirhtm.
+and we called it an $(1 - \frac{1}{e})$-competitive algorithm.
 
 Unlike the classical worst-case analysis of an algorithm, which only 
-focuses on the algorithm's performance for those ``hard" inputs. Competitive
-analysis requires the online algorithm to perform well on both ``easy" and
-``hard" inputs. Here ``easy" and ``hard" are defined accordingly with
+focuses on the algorithm's performance for those ``difficult" inputs. 
+Competitive analysis requires the online algorithm to perform well 
+on both ``easy" and ``difficult" inputs. 
+Here ``easy" and ``difficult" are defined accordingly with
 respect to the performance of the optimal offline algorithm.
 
 \section{Generalized Secretary Problems}
@@ -276,6 +279,7 @@ complicated. Therefore we have to generalize this problem and give more
 refined analysis to them.
 
 \subsection{Multiple-choice Secretary Problem}
+\label{multichoiceproblem}
 
 One if its generalization is, instead of just hiring one secretary among
 the $n$ applicants, the firm needs more secretaries (let's say $k$).
@@ -396,8 +400,9 @@ Then it is straightforward to proof the main theorem:
     Assume that $v_i^*$ is the $i$-th best applicant among 
     the $n$ applicants applying for the secretarial positions.
     Clearly that the answer of the optimal offline algorithm is 
-    $OPT = \sum_{i = 1}^{k} s(v_i^*)$.
-    By the linearity of expectation, the answer obtained by
+    $OPT = \sum_{i = 1}^{k} s(v_i^*)$ regardless 
+    what the incomming order is.
+    The by the linearity of expectation, the answer obtained by
     the virtual/optimistic algorithm is
     \begin{align*}
         E[ANS] &= \sum_{i = 1}^{n} s(v_i^*) \times \Pr(v_i^* \in S)
@@ -411,4 +416,57 @@ Then it is straightforward to proof the main theorem:
 
 \subsection{More on Generalized Secretary Problem}
 
-Besides multiple-choice secretary problem, 
+Besides multiple-choice secretary problem, there are many other
+generalizations of online secretary problem.
+For example, the \emph{knapsack secretary problem}, where each applicant
+has a cost -- you have to pay them the salary. You can select as many
+applicants as possible so long as your budget is feasible.
+
+It is known that the offline version of knapsack problem is NP-hard.
+But fortunately it adapts a full polynomial-time approximation scheme
+and a really simple 2-approximation algorithm 
+as in ~\cite{vazirani2001approximation}.
+By assuming that the incoming order is uniformly at random, 
+in ~\cite{babaioff2007knapsack} they proposed a 2-approximation algorithm
+with a constant competitive ratio.
+
+Another most interesting generalization is in a more algebric way -- the
+\emph{matroid secretary problem}, it requires that the applicants being
+chosen lie in a given matroid. There are many subproblems of it which
+are highly related to our daily lives:
+
+\begin{itemize}
+    \item In multiple-choice secretary problem the feasible set is a
+        \emph{uniform matroid}.
+
+    \item \emph{Transversal matroid}. For example $n$ customers are
+        purchasing tickets for $m$ movies and a bipartite indicating
+        which movies each customer is interested in. Each movie has
+        a capacity of seats and the goal is to find a subset of
+        customers with maximal total values who can all see a movie
+        simultaneously.
+
+    \item \emph{Gammoid}. Given a graph, each travelers are seeking
+        path from one source to other destination. Then the goal is to
+        route a subset of travelers with maximal profits without
+        violating capacities being set on the edge.
+
+    \item \emph{Graphic matroid} which is less natural motivated.
+        Each customers corresponds an edge, and the goal is to pick
+        a acyclic subgraph with maximal total value.
+\end{itemize}
+
+Some special cases of matroid secretary problem have been found a
+constant-competitive solution. Babaioff et al. gave constant-competitive
+algorithms for several classes of matroid including graphic matroid and
+transversal matroid with bounded degree in \cite{babaioff2007matroids}.
+Subsequently Dimitrov and Plaxton presented another constant-competitive
+algorithm for transversal matroid without bounded degree restriction in
+\cite{dimitrov2008competitive}.
+
+While whether general matroid secretary problem has a constant
+competitive ratio approach remains open. The best postitive result
+is in Babaioff et al. \cite{babaioff2007matroids}, they provide
+a $O(\log k)$-competitive algorithm where $k$ is the rank of matroid.
+This algorithm is also similar to the classical stopping rule.
+
