@@ -1,31 +1,31 @@
-\chapter{Preliminaries}
+\chapter{Preliminaries}\label{chap:preliminaries}
 
 \section{Graph Matching}
 
 \subsection{Bipartite Matching}
 
-A graph is called \emph{bipartite} if its vertex set can be 
+A graph is called \emph{bipartite} if its vertex set can be
 partitioned into two disjoint set $U$ and $V$ such that every edge
-connects a vertex in $U$ with a vertex in $V$. Such a graph is often 
+connects a vertex in $U$ with a vertex in $V$. Such a graph is often
 written as $G = (U, V, E)$ where $U$ and $V$ are two disjoint vertex set
 and $E$ is the edge set.
 
 A \emph{matching} in a graph $G = (U, V, E)$ is a set of edges $M$ such
-that no two edges shared a common vertex. And a matching $M$ is called 
+that no two edges shared a common vertex. And a matching $M$ is called
 \emph{maximal} if for every edge $e \in E \setminus M$ it satisfies that
 $e$ shares some common vertices with some edges from $E$.
 Normally we are interested in the \emph{maximum} matching, i.e.\ a matching
 containing the largest possible number of edges. And the size of the
 maximum matching is called the \emph{matching number} of this graph.
-Figure~\ref{maximummatching} shows an example of a maximum matching in
-a bipartite graph. Note that the problem of finding a maximum matching 
+Figure~\ref{fig:maximummatching} shows an example of a maximum matching in
+a bipartite graph. Note that the problem of finding a maximum matching
 can be solved in polynomial time by \emph{Hungarian method}.
 
 People show their great interests in finding the maximum matching since
 there are deep connections between the matching number and many other
-interesting properties in a given graph. 
+interesting properties in a given graph.
 For example, the \emph{K\"{o}nig's theorem} proved by D\'{e}nes K\H{o}nig
-in 1931 states that, in bipartite graph, it is equivalent to find 
+in 1931 states that, in bipartite graph, it is equivalent to find
 a maximum matching that to find a minimum set cover. Independently in
 the same year by Jen\H{o} Egerv\'{a}ry the same result was shown in the
 more general case of weighted bipartite graphs. Thus a lot of problems
@@ -54,31 +54,31 @@ algorithm in bipartite graphs (e.g.\ minimum set cover).
     \draw   (5) --  (6);
     \draw   (3) --  (4);
 \end{tikzpicture}
-\label{maximummatching}
 \caption{The red edges forms a maximum matching in graph}
+\label{fig:maximummatching}
 \end{figure}
 
 \subsection{Weighted Bipartite Matching}
 
 To generalize the maximum matching problem we could assign weights to those
-edges. And the goal is then changed to find a matching with the 
+edges. And the goal is then changed to find a matching with the
 largest/smallest possible weight. This gives us the \emph{maximum/minimum
 weighted bipartite matching problem}.
 
 Formally speaking, given a weighted complete bipartite graph
 $G = (U, V, w)$ where $U$ and $V$ are two disjoint vertex sets and the edge
-set $E = U \times V$. $w$ is the weight function maps every edge in $E$ 
+set $E = U \times V$. $w$ is the weight function maps every edge in $E$
 to its own weight in $\mathbb{R}$. We have to find a matching $M$ such that
 its weight $w(M) \triangleq \sum_{e \in M} w(e)$ is maximized/minimized.
 
 This maximum weighted bipartite matching problem characterized a lot of
-problems in our daily lives. For example we are selling some items 
-(e.g.\ potato, orange and banana) and the customers 
+problems in our daily lives. For example we are selling some items
+(e.g.\ potato, orange and banana) and the customers
 (e.g.\ alice, bob and celine) provides their prices on each of these items.
 Every customer wants only one item and a item could only be sold to one of
 the customers. The problem is how are we going to sell these items so that
-we can earn the most money. Figure~\ref{matchingexample} shows an example
-of such a problem, and it is clear that we should sell potato to alice, 
+we can earn the most money. Figure~\ref{fig:matchingexample} shows an example
+of such a problem, and it is clear that we should sell potato to alice,
 orange to celine and banana to bob so that we can earn $5 + 6 + 7 = 18$ in
 total.
 
@@ -96,14 +96,14 @@ total.
     \hline
 \end{tabular}
 \end{center}
-\label{matchingexample}
 \caption{An example of maximum weighted bipartite matching}
+\label{fig:matchingexample}
 \end{figure}
 
-To solve the maximum/minimum weighted bipartite matching problem, a 
-polynomial-time algorithm was proposed by Harold~\cite{kuhn1955hungarian}, 
-who gives the name ``\emph{Hungarian method}" as this algorithm was 
-largely based on the works done by two Hungarian mathematicians 
+To solve the maximum/minimum weighted bipartite matching problem, a
+polynomial-time algorithm was proposed by Harold~\cite{kuhn1955hungarian},
+who gives the name ``\emph{Hungarian method}" as this algorithm was
+largely based on the works done by two Hungarian mathematicians
 D\'{e}nes K\H{o}nig and Jen\H{o} Egerv\'{a}ry.
 
 \section{Online Algorithms}
@@ -112,11 +112,11 @@ But most of time in our real lives, our information about the graph is
 usually incomplete. And we have to make our decisions before the whole
 graph is shown to us.
 
-For example in figure~\ref{matching example}, when Alice comes and wants
+For example in figure~\ref{fig:matchingexample}, when Alice comes and wants
 to buy one item, we can not let her wait until Bob and Celine provide their
 prices. We have to make our decision right now on which one to sell before
 Alice gets angry. This scenario raises a new sort of problems in an online
-fashion -- the problems we have to output our answers before 
+fashion -- the problems we have to output our answers before
 the whole input was shown to us.
 
 \subsection{Secretary Problem}
@@ -125,7 +125,7 @@ One of the most classical problem is the \emph{online secretary problem}.
 
 Suppose you are hiring a secretary for your firm, and there are $n$
 applicants who come to apply for this job. You have to interview these
-applicants one by one in a random order until you choose one of 
+applicants one by one in a random order until you choose one of
 them as the secretary. After an interview you have to make your decision
 whether to offer her this secretarial position.
 Once the decision is made, it can not be revoked.
@@ -135,12 +135,12 @@ interviewed you can not know her score.
 How can you make a decision so that the probability of choosing the best
 applicant is maximized?
 
-People have found out that the best strategy for this problem is 
+People have found out that the best strategy for this problem is
 \emph{stopping rule}. This strategy contains two phases, the observation
 phase and the selection phase:
-In the \emph{observation phase}, the firm would interview the first $r - 1$ 
+In the \emph{observation phase}, the firm would interview the first $r - 1$
 applicants and reject them, set $t$ be the best score among them.
-Later in the \emph{selection phase}, the firm would choose the first 
+Later in the \emph{selection phase}, the firm would choose the first
 subsequent applicant who has a score better than $t$.
 Here $r$ is set accordingly and proportional to $n$.
 
@@ -150,7 +150,7 @@ We choose the secretary using stopping rule with $r = 3$. First we
 interview the first 2 applicants and reject them, record the best score
 as $t = 4$. When the third applicant comes in we found out that her score
 is no better than $t$, hence we reject her. Then the fourth applicant comes
-in, luckily she has a score $5$ greater than $t$, so we offer her the 
+in, luckily she has a score $5$ greater than $t$, so we offer her the
 secretarial position and terminate the protocol. Unfortuately we failed to
 pick the best one in the sixth place, but a score of $5$ is not so bad to
 our real needs.
@@ -167,13 +167,13 @@ be easily calculated:
          &= \sum_{i = r}^n \Pr(\text{no one is chosen before $i$}|\text{$i$-th applicant is the best}) \times \frac{1}{n} \\
          &= \sum_{i = r}^n \frac{r - 1}{i - 1} \times \frac{1}{n}
 \end{align*}
-Note that in the previous equations, the event that no one is chosen 
-before $i$ means the second best among the first $i$ applicant 
-appears before $r$. Therefore \\  
+Note that in the previous equations, the event that no one is chosen
+before $i$ means the second best among the first $i$ applicant
+appears before $r$. Therefore \\
 $\Pr(\text{no one is chosen before $i$}|\text{$i$-th applicant is the best}) = \frac{r - 1}{i - 1}$.
 
 When $n$ goes to infinity, $P(r)$ is approximately the integral
-$\frac{r}{n} \int_{\frac{r}{n}}^1 \frac{1}{x} \mathrm{d}x 
+$\frac{r}{n} \int_{\frac{r}{n}}^1 \frac{1}{x} \mathrm{d}x
 = \frac{r}{n} \ln(\frac{n}{r})$.
 
 In this problem we can choose $r \approx \frac{n}{e}$ which maximize the
@@ -181,27 +181,27 @@ integral above so that $P(\frac{n}{e}) \approx \frac{1}{e} \approx 0.368$.
 
 \subsection{Online Matching}
 
-Another perspective of this paper's work originates from online bipartite 
+Another perspective of this paper's work originates from online bipartite
 matching. Given a weighted bipartite graph $G = (U, V, w)$, but at first
-you don't know any information about this graph. 
+you don't know any information about this graph.
 Each time one vertex in $V$ is revealed and you can see the weights of
 all edges incident to it. Then you have to decide which vertex in $U$
 should be matched to it immediately before revealing the next vertex in $V$.
 When all vertex are shown to us you should grantee that the decisions
 you made form a matching and the weight of this matching is maximized.
-Note that the unweighted version of online bipartite matching 
-can be viewed as the weighted one where the edge weight 
+Note that the unweighted version of online bipartite matching
+can be viewed as the weighted one where the edge weight
 are limited in $\{0, 1\}$.
 
-In fact, the online secretary problem is a special case of online weighted 
-bipartite matching. Where the firm is the only one element in $U$ 
+In fact, the online secretary problem is a special case of online weighted
+bipartite matching. Where the firm is the only one element in $U$
 and all applicants form $V$.
 
 For the unweighted version, first we allow an adversery to decide the
 revealing order of $V$.
 The first landmark result was shown in~\cite{karp1990optimal} that if
 randomization is allowed, there exists an algorithm which in expectation
-obtains a matching of size at least $(1 - \frac{1}{e})n$ assuming that 
+obtains a matching of size at least $(1 - \frac{1}{e})n$ assuming that
 $\abs{U} = \abs{V} = n$ and there exists a matching of size $n$ in the
 underline graph. Recently in~\cite{birnbaum2008line} it provides a much
 simpler proof for this result and in~\cite{devanur2013randomized} it
@@ -210,35 +210,35 @@ This algorithm first randomly rank the vertex in $U$ and
 each time when one vertex $v$ in $V$ is revealed, it matches $v$ to the
 a vertex in $U$ with the highest possible rank.
 This algorithm does break the barrier that no deterministic protocol can
-find a matching of size better than $\frac{n}{2} + O(\log (n))$ in the 
+find a matching of size better than $\frac{n}{2} + O(\log (n))$ in the
 worst case. And then they proved this \emph{ranking algorithm} is indeed
 optimal for unweighted online bipartite matching problem.
 
 In another direction, if we assume that the revealing order of $V$ is
-uniformly at random, will there be some more powerful algorithms? 
-It is quite a hot topic in recent years, and the answer is luckily 
+uniformly at random, will there be some more powerful algorithms?
+It is quite a hot topic in recent years, and the answer is luckily
 positive. In~\cite{aggarwal2011online},~\cite{feldman2009online},
 ~\cite{mahdian2011online},~\cite{mehta2007adwords} and
 ~\cite{bahmani2010improved} they provide several new algorithms which
-achieve better performances and even work well in the weighted case. 
+achieve better performances and even work well in the weighted case.
 Most of these algorithms are based on linear programmming.
 
 \subsection{Competitive Analysis}
 
-Sometimes it may be a little bit complicated while analysing the performance 
+Sometimes it may be a little bit complicated while analysing the performance
 of online algorithms since these analyses are often highly dependent on the
 actual computational model behind. So a new powerful tool called
 \emph{competitive analysis} is invented to solve this problem.
 
 Competitive analysis of an online algorithm compares its performance to
-the performance of its optimal offline algorithm that knows all the input 
+the performance of its optimal offline algorithm that knows all the input
 data before making decisions.
 The outcome of the optimal offline algorithm is often called the God's
 result since it knows everything just as the God does.
 It is first brought out to analysis the protocols for dynamically
 maintaining a linear list in~\cite{sleator1985amortized}.
-And we called an algorithm 
-$\alpha$-competitive if its \emph{competitive ratio} 
+And we called an algorithm
+$\alpha$-competitive if its \emph{competitive ratio}
 -- the ratio between its solution and the solution of its optimal offline
 algorithm -- is bounded from above/below by $\alpha$. More formally,
 
@@ -247,39 +247,39 @@ algorithm -- is bounded from above/below by $\alpha$. More formally,
     to have a competitive ratio of $\alpha$ -- $\alpha$-competitive -- if
     and only if its outcome, denoted by $ALG$, and the optimal offline
     algorithm's outcome, denote by $OPT$, satisfy that
-    $\frac{ALG}{OPT} \ge \alpha$ 
+    $\frac{ALG}{OPT} \ge \alpha$
     (or respectively $\frac{ALG}{OPT} \le \alpha$).
 \end{definition}
 
-Note that this definition may change accordingly subject to the actual 
+Note that this definition may change accordingly subject to the actual
 computational model, such as involving randomness.
 
 For example, the ranking algorithm which is mentioned above to solve the
 unweighted online bipartite matching, always output a matching of size
 at lease $(1 - \frac{1}{e})n$ in expectation. While we know that the
 underline graph has a maximum matching of size $n$ and we can find it out
-using Hungarian algorithm (which is optimal offline algorithm). 
+using Hungarian algorithm (which is optimal offline algorithm).
 Therefore the competitive ratio of ranking algorithm is $(1 - \frac{1}{e})$
 and we called it an $(1 - \frac{1}{e})$-competitive algorithm.
 
-Unlike the classical worst-case analysis of an algorithm, which only 
-focuses on the algorithm's performance for those ``difficult" inputs. 
-Competitive analysis requires the online algorithm to perform well 
-on both ``easy" and ``difficult" inputs. 
+Unlike the classical worst-case analysis of an algorithm, which only
+focuses on the algorithm's performance for those ``difficult" inputs.
+Competitive analysis requires the online algorithm to perform well
+on both ``easy" and ``difficult" inputs.
 Here ``easy" and ``difficult" are defined accordingly with
 respect to the performance of the optimal offline algorithm.
 
 \section{Generalized Secretary Problems}
 
 In previous section we have introduced the classicle online secretary
-problem. It requires one firm to hire one secretary among 
+problem. It requires one firm to hire one secretary among
 a list of applicants. And it adapts an optimal protocol called the
 stopping rule. But in our real life, the scenarios could be more
 complicated. Therefore we have to generalize this problem and give more
 refined analysis to them.
 
 \subsection{Multiple-choice Secretary Problem}
-\label{multichoiceproblem}
+\label{sec:multichoiceproblem}
 
 One if its generalization is, instead of just hiring one secretary among
 the $n$ applicants, the firm needs more secretaries (let's say $k$).
@@ -289,12 +289,12 @@ for classical online secretary problem to solve this new problem.
 
 For example, we keep the observation phase unchanged -- reject the first
 $r - 1$ applicants and record the best score among them as $t$. And in
-the selection phase we choose every applicant whose score is greater than 
+the selection phase we choose every applicant whose score is greater than
 $t$ until we reach the quota $k$. Sadly this modified algorithm does not
 work so well as we expected. Difficulties show up when $k$ grows large.
 
-Here is a counterexample. Assume that $k = \alpha n$ for some constant 
-$\alpha$. Let $p$ be any constant with in the range $(0, 1)$ and 
+Here is a counterexample. Assume that $k = \alpha n$ for some constant
+$\alpha$. Let $p$ be any constant with in the range $(0, 1)$ and
 we will look at the best $p k$ applicants. The probability that no one
 among the best $p k$ applicants appears in the observations phase is
 $(1 - \frac{p k}{n})^r$. As for $k$ and $r$ are both proportional to $n$,
@@ -304,19 +304,19 @@ observation phase. Then in the selection phase, no more than $p k$
 applicants would be selected since the threshold $t$ is set to be the score
 of one of the best $p k$ applicants according to the protocol.
 So the competitive ratio of this modified protocol is no better than $p$.
-Notice that $p$ could be chosen arbitrarily as long as it's a constant, 
+Notice that $p$ could be chosen arbitrarily as long as it's a constant,
 so this protocol can never achieve a constant competitive ratio.
 
 In~\cite{kleinberg2005multiple} Robert Kleinberg gave a clever algorithm
 based on a simple recursion to solve the multiple-choice secretary problem.
-It achieves a competitive ratio of $1 - O(\sqrt{1 / k})$. 
-This is even better than constant competitive ratio that origin stopping 
+It achieves a competitive ratio of $1 - O(\sqrt{1 / k})$.
+This is even better than constant competitive ratio that origin stopping
 rule achieves. He did also proof that this result is already tight,
-i.e.\ no algorithm could achieve a competitive ratio of 
+i.e.\ no algorithm could achieve a competitive ratio of
 $1 - \Omega(\sqrt{1 / k})$.
 
 Later in~\cite{babaioff2007knapsack}, Moshe Babaioff, Nicole Immorlica,
-David Kempe and Robert Kleinberg proposed their modifications of the 
+David Kempe and Robert Kleinberg proposed their modifications of the
 classical stopping rule to solve the multiple-choice secretary problem
 with a constant competitive ratio.
 In their paper they provides two modifications, the \emph{virtual} algorithm
@@ -325,9 +325,9 @@ observation phase: observe and reject the first $r - 1$ applicants, but
 instead of setting just one threshold $t$, we keep a threshold set $T$ to
 be the set of the best $k$ applicants among them.
 Denote the score of applicant $v$ as $s(v)$.
-Denote that $T = \{t_1, t_2, \dots, t_{k}\}$ where 
+Denote that $T = \{t_1, t_2, \dots, t_{k}\}$ where
 $t_1, t_2, \dots, t_{k}$ are sorted in decreasing order with respect
-to their score $s(t_i)$. 
+to their score $s(t_i)$.
 Assume that $v_i$ is the $i$-th applicant according to the coming order.
 Then there comes the selection phase:
 \begin{itemize}
@@ -377,12 +377,12 @@ Denote the set of applicants who are selected by $S$.
 \end{lemma}
 
 The proof of lemma~\ref{optimistic} is quite complicated and requires
-pages long calculation. But the proof of lemma~\ref{virtual} is 
+pages long calculation. But the proof of lemma~\ref{virtual} is
 surprisingly simple:
 
 \begin{proof}[Proof of Lemma~\ref{virtual}:]
-    According to the protocol, if applicant $v$ -- the applicant 
-    whose score happens to be among the best $k$ applicants -- 
+    According to the protocol, if applicant $v$ -- the applicant
+    whose score happens to be among the best $k$ applicants --
     comes in at the $i$-th place where $i > r - 1$, it will
     be selected if and only if the last one in the threshold set $T$
     appears before time $r$. Since the coming order is uniformly at random,
@@ -397,10 +397,10 @@ surprisingly simple:
 Then it is straightforward to proof the main theorem:
 
 \begin{proof}[Proof of Theorem~\ref{multichoice}]
-    Assume that $v_i^*$ is the $i$-th best applicant among 
+    Assume that $v_i^*$ is the $i$-th best applicant among
     the $n$ applicants applying for the secretarial positions.
-    Clearly that the answer of the optimal offline algorithm is 
-    $OPT = \sum_{i = 1}^{k} s(v_i^*)$ regardless 
+    Clearly that the answer of the optimal offline algorithm is
+    $OPT = \sum_{i = 1}^{k} s(v_i^*)$ regardless
     what the incomming order is.
     The by the linearity of expectation, the answer obtained by
     the virtual/optimistic algorithm is
@@ -414,7 +414,7 @@ Then it is straightforward to proof the main theorem:
     Then the theorem is obtained by setting $r \approx \frac{n}{e}$.
 \end{proof}
 
-\subsection{More on Generalized Secretary Problem}
+\subsection{Matroid Secretary Problem}
 
 Besides multiple-choice secretary problem, there are many other
 generalizations of online secretary problem.
@@ -424,36 +424,38 @@ applicants as possible so long as your budget is feasible.
 
 It is known that the offline version of knapsack problem is NP-hard.
 But fortunately it adapts a full polynomial-time approximation scheme
-and a really simple 2-approximation algorithm 
+and a really simple 2-approximation algorithm
 as in ~\cite{vazirani2001approximation}.
-By assuming that the incoming order is uniformly at random, 
+By assuming that the incoming order is uniformly at random,
 in ~\cite{babaioff2007knapsack} they proposed a 2-approximation algorithm
 with a constant competitive ratio.
 
-Another most interesting generalization is in a more algebric way -- the
+Another most interesting generalization is in a more algebraic way -- the
 \emph{matroid secretary problem}, it requires that the applicants being
 chosen lie in a given matroid. There are many subproblems of it which
 are highly related to our daily lives:
 
 \begin{itemize}
-    \item In multiple-choice secretary problem the feasible set is a
-        \emph{uniform matroid}.
+    \item In multiple-choice secretary problem the feasible solution
+    forms a \emph{uniform matroid}.
 
     \item \emph{Transversal matroid}. For example $n$ customers are
         purchasing tickets for $m$ movies and a bipartite indicating
         which movies each customer is interested in. Each movie has
         a capacity of seats and the goal is to find a subset of
         customers with maximal total values who can all see a movie
-        simultaneously.
+        at the same time.
 
-    \item \emph{Gammoid}. Given a graph, each travelers are seeking
-        path from one source to other destination. Then the goal is to
-        route a subset of travelers with maximal profits without
-        violating capacities being set on the edge.
+    \item \emph{Gammoid}. For example, given a graph, some
+    travelers start their journey from an identical source. And each
+    of them has her own destination. The goal is to find pathes for
+    a subset of them with largest possible value such that the 
+    capacities on the edges are not violated.
 
     \item \emph{Graphic matroid} which is less natural motivated.
-        Each customers corresponds an edge, and the goal is to pick
-        a acyclic subgraph with maximal total value.
+        With a edge-weighted graph, by revealing the edge weight
+        one by one, the goal is to find an acyclic
+        subgraph whose total weight is maximized.
 \end{itemize}
 
 Some special cases of matroid secretary problem have been found a
@@ -464,9 +466,160 @@ Subsequently Dimitrov and Plaxton presented another constant-competitive
 algorithm for transversal matroid without bounded degree restriction in
 \cite{dimitrov2008competitive}.
 
-While whether general matroid secretary problem has a constant
-competitive ratio approach remains open. The best postitive result
-is in Babaioff et al. \cite{babaioff2007matroids}, they provide
+While the problem of whether general matroid secretary problem has a 
+constant competitive approach still remains open. The best postitive result
+so far is in Babaioff et al. \cite{babaioff2007matroids}, they provide
 a $O(\log k)$-competitive algorithm where $k$ is the rank of matroid.
-This algorithm is also similar to the classical stopping rule.
+This algorithm is also based on the classical stopping rule.
+Similar to the well known stopping rule, this algirthm consists of
+a observation phase and a selection phase. Starting by observing half
+of applicants, let $t$ be the best score of them. Then choose a
+scale parameter $j$ uniformly at random from $\{1, \dots, \log_2 k\}$.
+In the selection phase pick all applicants whose score is at least
+$\frac{t}{2^j}$ if it is still feasible. The intuition behind
+the effectiveness is, given the optimal solution $(v_1, \dots, v_k)$,
+the probability of threshold $\frac{v}{2^j}$ lies below $v_i$ is
+$\Omega(\frac{1}{\log_2 k})$, then it follows by the exchange property
+of matroid and linearity of expectation.
 
+\subsection{Time Discounting}\label{sect.discount}
+The previous discussion has treated the value of an element as independent of when it was
+selected.
+However, there are certain natural
+cases which the classical secretary problem does not address: e.g.,
+it does not capture the opportunity cost incurred due to
+delay in selecting an element. For example, when seeking
+to purchase a house, we might think of choosing a slightly
+suboptimal house at the beginning of the experiment (and
+being able to occupy it for the entire period) as being
+more desirable than a long wait to pick the most desirable
+house.
+
+We model such a problem as the {\em discounted secretary
+problem}, where we are given a time-dependent ``discount'' function $d(t)$ for
+every time step $t$: the benefit derived from choosing an
+element/secretary $e$ with value $v(e)$ at time $t$ is the product $d(t) \cdot v(e)$.
+The value of a set $S$ is thus $\sum_{x\in S} v(x) \cdot d(\pi(x))$,
+where $\pi(x)$ denotes the arrival
+time of $x$ in the random ordering of bids.
+In the example above, the discount function $d(t)$ is a monotone
+decreasing function of $t$, but in general the discount function
+may be more complicated due to other considerations. For
+example, our financial situation may improve over time and
+waiting longer may get us a better mortgage rate, so our
+¡°discount¡± function $d(t)$ may increase up to some point in
+time, and then decrease.
+We assume here that the discount fucntion $d(t)$ are
+known beforehand to the algorithm designer;
+they are not revealed online.
+
+Firstly, even the original secretary problem (i.e., choosing a single element from a sequence
+of n elements) becomes significantly more difficult with arbitrary discount factors.
+In \cite{babaioff2009secretary} they proved that no online algorithm for the resulting discounted
+secretary problem can achieve a better competitive ratio than $\Omega(\frac{\log n}{\log \log n})$.
+Their main idea is to construct a discount function $d$ and a family of instances
+$\mathcal{I}_1, ..., \mathcal{I}_{2c}$ such that no randomized algorithm can be
+$\Theta(\frac{\log n}{\log \log n})$-competitive on all the $\mathcal{I}_t$'s.
+
+On the positive side, In \cite{babaioff2009secretary} they also presented an online algorithm as follows.
+Let $d_{max}$ be the
+maximum discount and let $v_{max}$ be the maximum value. For
+$c \geq 1$ let $I_c = (2^{-c}d_{max}, 2^{-(c-1)}d_{max}]$ be the interval
+defining the $c$-th discount class, and let $P_c = \{i \in [n] :
+d(i) \in I_c\}$ be the set of times that have discount value
+in class $c$. Our algorithm $\mathcal A$ chooses a $c \in [3 \log n + 2]$
+uniformly at random, and then runs the classical secretary in
+the time steps $i \in P_c$. Note that $\mathcal A$ uses no knowledge of
+$E[OPT]$.
+This algorithm turns out to be $O(\log n)$-competitive for the discounted secretary problem,
+nearly matching the lower bound.
+
+Surprisingly, the problem becomes
+much easier with a small amount of information about the
+input | merely knowing the expected
+maximal benefit in advance (as is implied, for example, by knowing the unordered set of
+values) leads to dramatic improvements.
+In~\cite{babaioff2009secretary} they showed that knowing a good estimate $Z$ of $E[OPT]$
+enables one to design a constant competitive algorithm:
+Given that $Z \leq E[OPT]$, pick the
+first element $e$ seen (say, at time $j$) that satisfies
+$v(i) \cdot d(j) \geq Z/2$.
+This is a simple 4-competitive algorithm.
+
+However, In~\cite{babaioff2009secretary} they also exhibited that even
+knowing the entire unordered set $\{v(x)|x \in \mathcal{U}\}$ of values in advance, an online algorithm
+cannot be better than
+$\sqrt{2}$-competitive.
+To be specific, for any $\epsilon >0$,
+every algorithm $\mathcal{A}$ for the discounted secretary
+problem has
+$E[OPT] + E[\mathcal{A}] \geq \sqrt{2} - \epsilon$,
+even when $\mathcal{A}$ knows
+the set of values (and hence $E[OPT]$) in advance.
+
+
+Note that,
+all the algorithms discussed above are monotone, and thus can be
+converted to truthful mechanisms.
+Extensions of the discounted secretary problem to various matroid domains are
+also discussed in \cite{babaioff2009secretary}.
+
+Additional positive results have been obtained
+for the discounted secretary problem with specific ``well-behaved'' discount functions like
+$d(t)=\beta^t$ in~\cite{rasmussen1975choosing} or 
+$d(t)=\sum_{i=1}^n \beta^t$ in~\cite{mahdian2008secretary}
+for some fixed $\beta < 1$,
+as well as in a continuous-time model in which the values of the elements are independently
+and identically distributed and element arrivals are given by some renewal stochastic process
+in~\cite{gershkov2007dynamic}.
+
+
+\subsection{Incentive Compatibility}\label{sec:incentive}
+Our motivating examples have been drawn from various online auction scenarios.
+Yet we have so far ignored incentive issues:
+the problem that the bidders may not reveal their values
+or other parameters correctly if a misrepresentation stands to benefit them.
+Fortunately,
+all of the algorithms described so far are {\em value-monotonic}: each time a new element $x$ is
+about to be observed, there is a predetermined threshold $u(x)$ (possibly infinite) such that
+$x$ will be selected if and only if $v(x) \geq u(x)$. Value-monotonicity directly implies that the
+algorithms are truthful, so long as bidders can only manipulate their declared value, and not
+| for example | their arrival time.
+To convert the algorithm into a truthful mechanism,
+one simply charges each bidder $x$ a price of $u(x)$ if he is selected, and 0 otherwise.
+
+
+The situation becomes notably more complex if the agents also have some control over
+their arrival times.
+For example, a person shopping for airline tickets may choose not to
+purchase them at the earliest possible time, instead preferring to wait until a later date
+in hopes of a price reduction. To model agents' ability to strategize about their arrival
+time, we assume that each agent has an arrival time $a(x)$ and departure time $d(x)$, such
+that the agents are randomly ordered by arrival time. The agent's reported arrival and
+departure times $\hat{a}(x), \hat{d}(x)$ may differ from the actual arrival and departure times.
+If agent
+$x$ is selected during the time interval $[a(x), d(x)]$, he receives a value of $v(x)$;
+otherwise, he
+receives no value for being selected.
+The agent's ability to manipulate his reported arrival
+and departure times is constrained by his true arrival and departure times; some common
+assumptions are {\em no early arrivals $(\hat{a}(x) \geq a(x))$, no late departures $(\hat{d}(x) \leq d(x))$}, or
+both. These assumptions are justified if the agent's presence can be directly verified, or
+(in the case of ``no early arrivals'') if we think of $a(x)$ as the time at which the agent first
+becomes aware of the existence of the auction or of his own desire to participate in it.
+
+Some of the algorithms discussed earlier in this article can be transformed into truthful
+online mechanisms in the no-early-arrivals model, with little or no loss in the competitive
+ratio.
+Specifically, a variant of Dynkin's algorithm is truthful and $e$-competitive in the
+no-early-arrivals model \cite{hajiaghayi2004adaptive}, and Kleinberg's $(1+O(k^{-1/2}))$-competitive
+algorithm for the $k$-choice secretary problem in~\cite{kleinberg2005multiple} can be transformed into a
+truthful and $(1+O(k^{-1/2}))$-competitive mechanism for the $k$-choice secretary problem
+in the no-early-arrivals model.
+The basic idea for both of these results is to modify the
+original algorithm so that whenever it sets a new threshold price, it scans through the list of
+agents who have not yet departed and selects those whose value exceeds the new threshold,
+even if they arrived much earlier. At the departure time of any agent who was selected as
+a winner of the auction, the agent is charged a price equal to the minimum threshold price
+attained during the agent's reported arrival-departure interval, even if this price is lower
+than the threshold price at the time the agent was selected as a winner.

@@ -1,28 +1,137 @@
 \chapter{Introduction}
 
-Variants of online secretary problem have be
+Recent years, the TV show ``The Voice of China" has grown its interests
+among the people. The show which intends to find the most talented vocalist
+among a list of contestants has several rounds. In the first round,
+the \emph{blind audition}, contestants come into the stage one by one
+and give their performances to show their gifts on singing. 
+At first all coaches are faced towards the audience during the performance.
+If some of them get impressed, they could hit the button and turn the chair
+around. In the end of one performance, the contestant cound choose one of
+the coaches who turn the chair around to be the mentor and continue the
+competition and even win the show. For coaches, they have a quota on
+how many team members they can have so they have to be very careful 
+making their decisions on whether to turn the chair or not.
+It is an interesting problem for each of the coaches that, by adopting
+what strategies they can find the most talented vocalists to form his/her
+team so that they can win the show.
 
-emph{TODO: Need revision}
+A problem of this kind, which intends to find one or several maximal
+elements from an unknown input stream, has a origination of
+``online secretary problem" and has been under intensive studies for many
+years (see~\cite{ferguson1989solved} and~\cite{freeman1983secretary} for a
+survey).
 
-\emph{TODO: connection and distinction with online matching}
+In the original version of online secretary problem, these is only one
+firm (just as the coach in blind audition) who wants to hire one secretary.
+And the secretary comes in for an interview one by one in a random order.
+After one interview the firm should make a instant decision on whether to
+accept the applicant as its secretary. All the decisions are non-revokable.
+It is known that the best strategy for original online secretary problem
+is stopping rule and with a probability of at least $\frac{1}{e}$ the firm
+could hire the best secretary.
 
-Consider a complete weighted bipartite graph
-$G = (U, V, w), w: U \times V \rightarrow R^{+}$.
-$U = \{u_1, u_2, \dots, u_m\}$ and $V = \{v_1, v_2, \dots, v_n\}$ ($m \le n$)
-are commonly known as firms and applicants in the market, respectively.
-To avoid ties, we assume that no two edges have the same weight.
+Since then many variations of online secretary problem have been brought
+out. Such as 
+\begin{itemize}
+	\item The \emph{multiple-choice secretary problem} which allows 
+the firm to hire more than one secretaries, and it is nearly optimally 
+solved in~\cite{kleinberg2005multiple}. It also adopts a simple algorithm
+in~\cite{babaioff2007knapsack} which has a good performance.
 
-In an online setting, all applicants arrive one by one
-in a random order.
-Each firm decides whether to send an offer immediately or not,
-and then each applicant can choose an offer from what she has got.
-And the edge weight $w(u,v)$ is considered to be the benefit $u$ and $v$ will get
-if the applicant $v$ accepts the offer from the firm $u$, in other words, $w(u,v)$ is both the value of $u$ for $v$ and the value of $v$ for $u$.
-Note that each firm can hire at most one applicant as its secretary.
-All decisions can not be revoked.
-Firms and applicants can only see weights of edges which are
-incident to them.
-Our goal is to design decentralized algorithms for each firm such that (i) the resulting overall social welfare is nearly optimal and (ii) each firm by adopting the proposed algorithm can get the nearly optimal applicant.
-By ``decentralized'' it means there is no supervisor doing the
-assignments, and each firm runs its own algorithm independently with no
-communication.
+	\item The \emph{knapsack secretary problem} which assume that each 
+	applicant has a cost if the firm hires her and the firm could
+	hire as many secretaries as possible if the budget is feasible. This
+	problem also has a simple but effective algorithm in 
+	approximation scheme~\cite{babaioff2007knapsack}.
+
+	\item The \emph{matroid secretary problem} which generalized the
+	feasible set of applicants being chosen to the matroid structure.
+	Several subproblems of it have been found that there exists 
+	an elegent solution in
+	~\cite{dimitrov2008competitive}~\cite{babaioff2007matroids},
+	but for the general case the problem remains open.
+
+	\item \emph{Online secretary problem with time discounting} which
+	involves the opportunity cost as studied 
+	in~\cite{babaioff2008secretary}~\cite{rasmussen1975choosing}
+	~\cite{gershkov2007dynamic}. 
+	It assume that the weights of applicants
+	may discount as the time grows.
+
+	\item The \emph{incentive compatibility} is also an interesting
+	topic.
+
+\end{itemize}
+
+In this paper we will be considering the model as the blind audition
+in television show The Voice of China. For simplicity we assume that
+the quota for each coach is just 1. And we will present our algorithms
+for it and analysis whether they could achieve good performances in
+different scenarios.
+For analyzing the performance of online algorithm, we use the powerful
+tool ``competitive analysis" proposed in~\cite{sleator1985amortized}
+by comparing its outcome to the optimal offline algorithm's outcome.
+
+In another perspective, we could also describe this problem in an online
+matching way. You have an underline weighted bipartite graph with
+edge weights unknown to us. In an online setting you have to find a
+matching with the largest possible weight while revealing the vertex one
+by one. By revealing one vertex it means that you can see the weights
+of all the edges incident to it.
+With no assumption, in~\cite{khuller1994line} they proposed an online
+deterministic algorithm for online weighted matching and claimed this is
+optimal. And if randomization is allowed,
+the optimal algorithm for unweighted case has been found out in
+\cite{karp1990optimal}.
+Even more if we assume that the revealing order is uniform at random,
+many algorithms have been proposed in recent years and they did achieve
+a better performance than the old ones. Such as~\cite{aggarwal2011online},~\cite{feldman2009online},
+~\cite{mahdian2011online},~\cite{mehta2007adwords} and
+~\cite{bahmani2010improved}. Most of them was based on linear programming.
+
+One common problem of those algorithms is, they require the firms 
+(or the coaches) to cooperate or there should be one supervisor doing
+the assignment. In this paper, we are going to propose some
+decentralized algorithms. By decentralization it means that the firms
+could not communicate with each other and have no global information
+during the execution, and there are no supervisor doing the assignment.
+
+In chapter~\ref{chap:preliminaries}, we are going to introduce some
+basic notions. From the formal definition of graph matching to its online
+version, and many variations of online secretary problem with their
+solutions, as well as the details about competitive analysis.
+
+In chapter~\ref{chap:general}, we are going give a formal description of
+our model and the objective functions. Then we will propose two simple
+decentralized algorithms and check whether they could solve this problem
+in general case.
+
+In chapter~\ref{chap:specific}, we are going to propose some models for
+more specific scenarios. And see how could the two algorithms proposed
+in chapter~\ref{chap:general} could manage these situations.
+
+%   In another perspective, we could also describe this problem in a
+%   weighted online bipartite matching way:
+%   consider a complete weighted bipartite graph
+%   $G = (U, V, w), w: U \times V \rightarrow R^{+}$.
+%   $U$ and $V$ are commonly known as firms and applicants in the market, 
+%   respectively.
+%   To avoid ties, we assume that no two edges have the same weight.
+%   In an online setting, all applicants arrive one by one for an interview
+%   in a uniform at random order.
+%   After each interview each firm has to decide whether to 
+%   accept this applicant as its secretary,
+%   and then each applicant can choose an offer from what she has got.
+%   The edge weight $w(u,v)$ is considered to be the benefit $u$ and $v$ 
+%   will get if the applicant $v$ accepts the offer from the firm $u$, 
+%   in other words, $w(u,v)$ is both the value of $u$ for $v$ and 
+%   the value of $v$ for $u$.
+%   All decisions can not be revoked. 
+%   And each firm could only hire one secretary.
+%   The goal is to design decentralized algorithms for each firm such that 
+%   (i) the resulting overall social welfare is nearly optimal and 
+%   (ii) each firm by adopting the proposed algorithm can get the nearly optimal applicant.
+%   By ``decentralized'' it means there is no supervisor doing the
+%   assignments, and each firm runs its own algorithm independently with no
+%   communication.
