@@ -85,16 +85,16 @@ Before the proof of this theorem, first we have to introduce some notations:
     These $m-1$ events (each with probability $\frac{r-1}{r}$) are independent from each other,
     and are all independent from $B(u, v_i)$ and $P(u, v_i)$.
     Thus
-    $$\Pr(A(u, v_i)|B(u, v_i), P(u, v_i)) \ge (\frac{r-1}{r})^{m-1}$$
+    $$\Pr(A(u, v_i)|B(u, v_i), P(u, v_i)) \ge \left(\frac{r-1}{r}\right)^{m-1}$$
 
     To sum up:
-    $$\Pr(u\text{ gets the best}) \ge \sum_{i=r}^{n} \frac{1}{n} \times \frac{r-1}{i-1} \times (\frac{r-1}{r})^{m-1}$$
+    $$\Pr(u\text{ gets the best}) \ge \sum_{i=r}^{n} \frac{1}{n} \times \frac{r-1}{i-1} \times \left(\frac{r-1}{r}\right)^{m-1}$$
 
     Let $p = \frac{r}{n}$ be a constant, and assume that $m \le \alpha n$ where $\alpha \in (0,1]$ is a parameter.
 
-    Then $(\frac{r-1}{r})^{m-1} \ge (1-\frac{1}{r})^{\alpha n} = ((1-\frac{1}{r})^{r})^{\frac{\alpha}{p}}$ and
+    Then $\left(\frac{r-1}{r}\right)^{m-1} \ge \left(1-\frac{1}{r}\right)^{\alpha n} = \left(\left(1-\frac{1}{r}\right)^{r}\right)^{\frac{\alpha}{p}}$ and
 
-    $$\Pr(u \text{ gets the best}) \ge ((1 - \frac{1}{r})^r)^{\frac{\alpha}{p}} \sum_{i=r}^{n} \frac{1}{n}\frac{r-1}{i-1}$$
+    $$\Pr(u \text{ gets the best}) \ge \left(\left(1 - \frac{1}{r}\right)^r\right)^{\frac{\alpha}{p}} \sum_{i=r}^{n} \frac{1}{n}\frac{r-1}{i-1}$$
 
     Now let $n$ goes to infinity and it is asymptotically the integral:
 
