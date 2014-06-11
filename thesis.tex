@@ -19,6 +19,7 @@
 \usepackage{graphicx}
 \usepackage{epstopdf}
 %\usepackage{indentfirst}
+\usepackage{pdfpages}
 
 \usepackage{fancyhdr}
 \fancypagestyle{plain}{%
@@ -143,6 +144,12 @@
 %%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
+
+\includepdf{title.pdf}
+
+\newpage
+\thispagestyle{empty}
+\mbox{}
 
 \pagenumbering{gobble} % disable page numbering
 
